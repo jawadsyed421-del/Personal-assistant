@@ -1,10 +1,45 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f7f8fa">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fa">
   <title>Fieldnote — Personal assistant workspace</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="feedback.css"><link rel="stylesheet" href="theme.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="meadow-atmosphere.css">
 </head>
-<body><a class="skip-to-main" href="#app">Skip to main content</a><main id="app" aria-live="polite"></main><div class="toast" id="toast" role="status" aria-live="polite"></div><script src="app.js"></script><script src="feedback.js"></script></body>
+<body>
+  <div class="meadow-scene" aria-hidden="true">
+    <div class="meadow-sky"></div>
+    <svg class="meadow-hills" viewBox="0 0 1440 720" preserveAspectRatio="none" focusable="false">
+      <defs>
+        <linearGradient id="hill-far" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8589b5"/><stop offset="1" stop-color="#555982"/></linearGradient>
+        <linearGradient id="hill-mid" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#50577e"/><stop offset="1" stop-color="#283555"/></linearGradient>
+        <linearGradient id="hill-near" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#273958"/><stop offset="1" stop-color="#101a35"/></linearGradient>
+        <linearGradient id="mist" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e2e3f1" stop-opacity="0"/><stop offset=".45" stop-color="#d9daed" stop-opacity=".55"/><stop offset="1" stop-color="#e2e3f1" stop-opacity=".88"/></linearGradient>
+        <radialGradient id="horizon-glow"><stop stop-color="#e2b7e6" stop-opacity=".7"/><stop offset="1" stop-color="#dbb0e4" stop-opacity="0"/></radialGradient>
+      </defs>
+      <ellipse cx="1020" cy="210" rx="420" ry="170" fill="url(#horizon-glow)"/>
+      <path d="M0 352Q190 248 348 318T682 306q178-94 338 4t420-19v429H0Z" fill="url(#hill-far)" opacity=".68"/>
+      <path d="M0 426q210-128 426-39t388-5q178-103 331-4t295-42v399H0Z" fill="url(#hill-mid)" opacity=".84"/>
+      <path d="M0 510q205-109 420-34t421-12q211-94 372-21t227-4v345H0Z" fill="url(#hill-near)"/>
+      <path d="M0 367q310-62 561 13t465-12q243-66 414 8v130q-220-52-405 10t-435 0Q292 455 0 520Z" fill="url(#mist)" opacity=".68"/>
+      <path d="M0 651q290-70 590-3t850-5" fill="none" stroke="#d8d8ed" stroke-opacity=".23" stroke-width="2"/>
+      <path d="M0 683q260-38 520 3t920-14" fill="none" stroke="#d8d8ed" stroke-opacity=".15" stroke-width="2"/>
+    </svg>
+    <div class="meadow-stars"></div>
+    <div class="meadow-fireflies"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="meadow-fog"></div>
+  </div>
+  <a class="skip-to-main" href="#app">Skip to main content</a>
+  <main id="app" aria-live="polite"></main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+  <script src="feedback.js"></script>
+</body>
 </html>
