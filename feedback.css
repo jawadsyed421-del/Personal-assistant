@@ -1,0 +1,47 @@
+/* Responsive typography and assistant-dashboard feedback */
+body{font-size:clamp(14px,1vw + 11px,16px);line-height:1.55}
+.step-label,.step-count{font-size:11px}
+.onboard-card h2{font-size:clamp(22px,2vw + 12px,26px)}
+.card-description,.form-field label,.input,.select,.textarea{font-size:14px}
+.optional{font-size:10px}
+.form-help,.welcome-points li{font-size:12px}
+.welcome-copy{font-size:clamp(14px,1vw + 10px,16px)}
+.welcome-title{font-size:clamp(40px,5vw,60px)}
+.main-heading h1{font-size:clamp(24px,2.4vw,31px)}
+.main-heading p{display:none}
+.workspace-name{font-size:10px;letter-spacing:.6px}
+.workspace-name span{font-size:10px}
+.side-nav button{font-size:12px}
+.nav-glyph{font-size:15px}
+.metric-label{font-size:11px}
+.metric-value{font-size:clamp(22px,2vw,28px)}
+.metric-foot{font-size:10px}
+.dashboard-metrics{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;margin:0 0 12px}
+.dashboard-metrics .metric{min-width:0;min-height:80px;padding:12px 13px}
+.metric-danger .metric-value{color:#c34f4f}
+.quick-action-row{margin:0 0 14px}
+.quick-action-row button{min-height:36px;font-size:11px;padding:7px 10px}
+.dashboard-ops-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.dashboard-panel{min-width:0}
+.dashboard-panel .panel-head h2{font-size:13px}
+.dashboard-panel .panel-head span{font-size:10px}
+.dashboard-empty{min-height:99px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;padding:14px;text-align:center;color:#8290a1;font-size:11px}
+.dashboard-empty b{font-size:11px;font-weight:500}
+.dashboard-empty .empty-mini-icon{margin:0 auto 3px}
+.dashboard-footnote{margin-top:16px;color:#8592a2;font-size:11px}
+.attention-item{min-height:54px;padding:9px 13px;display:flex;align-items:center;gap:9px;border-top:1px solid #f0f2f5}
+.attention-item .task-item-main{flex:1;min-width:0}
+.attention-item .task-item-main b{font-size:11px}
+.attention-item .task-item-main small{font-size:10px}
+.attention-mark{width:21px;height:21px;border-radius:6px;display:grid;place-items:center;font-size:11px}
+.attention-mark.danger{background:#fff0ef;color:#cb5e55}
+.attention-mark.info{background:#eef3fc;color:#6683c1}
+.attention-mark.waiting{background:#fff5e5;color:#ad802e}
+.skip-to-main{position:fixed;top:-60px;left:10px;z-index:100;background:#fff;color:#264f9e;border:1px solid #ccd8ed;border-radius:6px;padding:8px 12px;font-size:12px}
+.skip-to-main:focus{top:10px}
+.onboard-card[data-step="1"] .card-description{display:none}
+@media(max-width:1100px){.dashboard-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:1020px){.onboard{max-width:650px;grid-template-columns:minmax(0,1fr);gap:24px;padding:24px}.onboard-left{padding:0}.welcome-kicker{margin-top:35px}.welcome-title{font-size:clamp(39px,7vw,54px)}.privacy-line{margin-top:23px}.onboard-card{justify-self:stretch;max-width:none}}
+@media(max-width:850px){.dashboard-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.dashboard-ops-grid{grid-template-columns:1fr}.workspace-layout{grid-template-columns:204px minmax(0,1fr)}.workspace-main{padding:22px clamp(16px,2.5vw,28px)}}
+@media(max-width:720px){.dashboard-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.dashboard-metrics .metric{min-height:72px;padding:10px}.dashboard-ops-grid{gap:8px}.dashboard-panel .panel-head{height:52px;padding:10px 12px}.attention-item{padding:9px 10px}.main-heading h1{font-size:clamp(23px,6vw,28px)}.quick-action-row button{font-size:10px}.step-label,.step-count{font-size:10px}.onboard-card h2{font-size:22px}.form-field label{font-size:12px}.input,.select,.textarea{font-size:14px}.onboard-card{padding:22px 19px}.welcome-title{font-size:clamp(38px,10vw,48px);letter-spacing:-1.9px}}
+@media(max-width:380px){.dashboard-metrics{gap:6px}.dashboard-metrics .metric-label{font-size:10px}.dashboard-metrics .metric-value{font-size:22px}.welcome-title{font-size:37px}.flow-preview{gap:1px}}

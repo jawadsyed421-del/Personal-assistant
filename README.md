@@ -8,6 +8,8 @@ A responsive frontend prototype based on the PA Operations Platform PRD. The fir
 
 Open `index.html` in a modern browser. No install or build step is needed. DM Sans and Manrope load from Google Fonts when online, with system sans-serif fallbacks.
 
+The assistant name is optional during onboarding. The home screen is clearly identified as the **Assistant dashboard** and shows six live counts derived only from entries in the current browser session. Work is grouped into attention, due today, waiting, upcoming, completed and open-task views. Layout and type scale adjust for desktop, tablet and mobile.
+
 ### Sidebar modules
 
 Dashboard, Inbox (Comms), Tasks, Calendar, Email, Approvals, Expenses, Invoices & Billing, Household Staff, Documents & Vault, Contacts Directory, Reminders & Alerts, Client Workspaces, and Integrations & Settings. Client and employee portal previews are available from the sidebar and role selector.
