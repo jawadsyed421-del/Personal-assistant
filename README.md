@@ -6,7 +6,7 @@ A responsive frontend prototype based on the PA Operations Platform PRD. The fir
 
 ### Open the prototype
 
-Open `index.html` in a modern browser. No install or build step is needed. DM Sans and Manrope load from Google Fonts when online, with system sans-serif fallbacks.
+Open `index.html` in a modern browser. No install or build step is needed. DM Sans and Manrope load from Google Fonts when online, with system sans-serif fallbacks. The assistant workspace includes a light/dark theme switch, searchable in-session records (Ctrl/Cmd+K), and a quick-create menu for common workflows. These controls use the current in-memory session only; refreshing clears all entries and the selected theme.
 
 The assistant name is optional during onboarding. The home screen is clearly identified as the **Assistant dashboard** and shows six live counts derived only from entries in the current browser session. Work is grouped into attention, due today, waiting, upcoming, completed and open-task views. Layout and type scale adjust for desktop, tablet and mobile.
 
