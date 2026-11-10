@@ -1,5 +1,5 @@
 // Feedback update: clearer assistant identity, optional assistant name, and a live-data dashboard.
-moduleInfo.dashboard[0] = 'Assistant dashboard';
+moduleInfo.dashboard[0] = 'Today';
 moduleInfo.dashboard[1] = '';
 
 const renderOnboardingBeforeFeedback = renderOnboarding;
@@ -24,6 +24,7 @@ document.addEventListener('click', event => {
   event.preventDefault();
   event.stopImmediatePropagation();
   render();
+  window.scrollTo(0, 0);
 }, true);
 
 function dashboardDate() {
@@ -47,61 +48,63 @@ function dashboardPanel(title, items, emptyMessage, action, actionLabel) {
 }
 
 function renderDashboard() {
-  const tasks = state.tasks.filter(task => state.activeClient === 'all' || task.clientId === state.activeClient);
-  const approvals = scoped(state.approvals).filter(item => item.status === 'Pending');
-  const invoices = scoped(state.invoices).filter(item => ['Sent', 'Partially Paid', 'Overdue'].includes(item.status));
-  const today = dashboardDate();
-  const dueToday = tasks.filter(task => taskDateStatus(task, today) === 'today');
-  const overdue = tasks.filter(task => taskDateStatus(task, today) === 'overdue');
-  const newRequests = tasks.filter(task => task.status === 'New Request');
-  const waitingOn = [
-    ...tasks.filter(task => task.status === 'Waiting for Client').map(task => `
-      <div class="task-item"><span class="task-item-main"><b>${esc(task.title)}</b><small>${clientMark(task.clientId)}${esc(clientById(task.clientId)?.name || 'Client')}</small></span><span class="task-status">Client</span></div>`),
-    ...approvals.map(item => `
-      <div class="task-item"><span class="task-item-main"><b>${esc(item.title)}</b><small>${clientMark(item.clientId)}${esc(clientById(item.clientId)?.name || 'Client')}</small></span><span class="task-status">Approval</span></div>`)
-  ];
-  const attention = [
-    ...overdue.map(task => `
-      <div class="attention-item"><span class="attention-mark danger">!</span><span class="task-item-main"><b>${esc(task.title)}</b><small>${clientMark(task.clientId)}${esc(clientById(task.clientId)?.name || 'Client')} · Overdue</small></span><button class="button-text" data-view="tasks">Open</button></div>`),
-    ...newRequests.map(task => `
-      <div class="attention-item"><span class="attention-mark info">↗</span><span class="task-item-main"><b>${esc(task.title)}</b><small>${clientMark(task.clientId)}${esc(clientById(task.clientId)?.name || 'Client')} · New request</small></span><button class="button-text" data-view="tasks">Open</button></div>`),
-    ...approvals.map(item => `
-      <div class="attention-item"><span class="attention-mark waiting">◷</span><span class="task-item-main"><b>${esc(item.title)}</b><small>${clientMark(item.clientId)}${esc(clientById(item.clientId)?.name || 'Client')} · Awaiting approval</small></span><button class="button-text" data-view="approvals">Open</button></div>`)
-  ];
-  const appointments = scoped(state.events)
-    .filter(item => !item.date || item.date >= today)
-    .sort((a, b) => (a.date || '').localeCompare(b.date || ''))
-    .map(item => `<div class="task-item"><span class="task-item-main"><b>${esc(item.title)}</b><small>${clientMark(item.clientId)}${esc(clientById(item.clientId)?.name || 'Client')} · ${esc(item.date)} ${esc(item.time)}</small></span><span class="task-status">Event</span></div>`);
-  const reminders = scoped(state.reminders)
-    .filter(item => item.status === 'Scheduled')
-    .slice(0, 3)
-    .map(item => `<div class="task-item"><span class="task-item-main"><b>${esc(item.title)}</b><small>${clientMark(item.clientId)}${esc(clientById(item.clientId)?.name || 'Client')} · ${esc(item.when)}</small></span><span class="task-status">Reminder</span></div>`);
-  const todayRows = dueToday.map(task => `<div class="task-item"><span class="task-item-main"><b>${esc(task.title)}</b><small>${clientMark(task.clientId)}${esc(clientById(task.clientId)?.name || 'Client')}</small></span><span class="task-status">${esc(task.priority)}</span></div>`);
-  const completed = tasks.filter(task => task.status === 'Completed').slice(0, 3).map(task => `<div class="task-item"><span class="task-item-main"><b>${esc(task.title)}</b><small>${clientMark(task.clientId)}${esc(clientById(task.clientId)?.name || 'Client')}</small></span><span class="task-status done">Completed</span></div>`);
-  const openTasks = tasks.filter(task => !['Completed', 'Cancelled'].includes(task.status)).slice(0, 4).map(task => `<div class="task-item"><span class="task-item-main"><b>${esc(task.title)}</b><small>${clientMark(task.clientId)}${esc(clientById(task.clientId)?.name || 'Client')}</small></span><span class="task-status">${esc(task.status)}</span></div>`);
+  const tasks = scoped(state.tasks);
+  const openTasks = tasks.filter(task => !['Completed', 'Cancelled'].includes(task.status));
+  const waiting = openTasks.filter(task => ['Waiting for Client', 'Waiting for Approval'].includes(task.status)).length;
+  const pendingApprovals = scoped(state.approvals).filter(item => item.status === 'Pending').length;
+  const clients = state.activeClient === 'all'
+    ? state.clients
+    : state.clients.filter(client => client.id === state.activeClient);
+  const hasClient = clients.length > 0;
+  const needsDecision = waiting + pendingApprovals;
+  const currentStep = !hasClient ? 0 : openTasks.length ? 2 : 1;
+  const taskWord = openTasks.length === 1 ? 'task' : 'tasks';
+  const title = !hasClient
+    ? 'Start with one client'
+    : openTasks.length
+      ? 'Your next steps, clearly in view'
+      : 'Capture your first request';
+  const description = !hasClient
+    ? 'Create a private workspace for a client. Then capture a request and review the next step before it is added.'
+    : openTasks.length
+      ? `You have ${openTasks.length} open ${taskWord}. Review each task and update its status as the work moves.`
+      : 'Choose a client, capture what they need, and review the task before it enters your list.';
 
-  return `<div class="dashboard-metrics">
-    <div class="metric"><div class="metric-label">Active clients</div><div class="metric-value">${state.clients.length}</div></div>
-    <div class="metric"><div class="metric-label">Due today</div><div class="metric-value">${dueToday.length}</div></div>
-    <div class="metric metric-danger"><div class="metric-label">Overdue</div><div class="metric-value">${overdue.length}</div></div>
-    <div class="metric"><div class="metric-label">New requests</div><div class="metric-value">${newRequests.length}</div></div>
-    <div class="metric"><div class="metric-label">Pending approvals</div><div class="metric-value">${approvals.length}</div></div>
-    <div class="metric"><div class="metric-label">Pending invoices</div><div class="metric-value">${invoices.length}</div></div>
-  </div>
-  <div class="quick-action-row">
-    <button data-action="capture">＋ Capture message</button><button data-action="new-task">＋ New task</button><button data-action="new-event">＋ Add event</button><button data-action="new-expense">＋ Add expense</button><button data-action="new-approval">＋ Request approval</button>
-  </div>
-  <div class="dashboard-ops-grid">
-    ${dashboardPanel('Needs attention', attention, 'Nothing needs your attention yet.', 'capture', 'Capture a conversation')}
-    ${dashboardPanel('Due today', todayRows, 'No tasks due today.', 'new-task', 'Add a task')}
-    ${dashboardPanel('Waiting on', waitingOn, 'Nothing is waiting on a client.', 'new-approval', 'Request approval')}
-    ${dashboardPanel('Coming up', [...appointments, ...reminders], 'No appointments or reminders are coming up.', 'new-event', 'Add an appointment')}
-    ${dashboardPanel('Taken care of', completed, 'Completed tasks will appear here.', null, '')}
-    ${dashboardPanel('Open tasks', openTasks, 'No open tasks yet.', 'new-task', 'Create a task')}
-  </div>
-  <div class="dashboard-footnote"><span class="privacy-bullet"></span>Assistant workspace · Client information stays separate</div>`;
+  return `
+    <section class="dashboard-summary" aria-label="Workspace overview">
+      <div class="summary-stat"><span>Active clients</span><strong>${clients.length}</strong></div>
+      <div class="summary-stat"><span>Open tasks</span><strong>${openTasks.length}</strong></div>
+      <div class="summary-stat"><span>Needs a decision</span><strong>${needsDecision}</strong></div>
+    </section>
+    <section class="dashboard-start">
+      <div class="dashboard-start-copy">
+        <div class="dashboard-kicker">${hasClient ? 'YOUR WORKSPACE' : 'A SIMPLE PLACE TO START'}</div>
+        <h2>${title}</h2>
+        <p>${description}</p>
+        ${openTasks.length
+          ? `<button class="button button-primary" data-view="tasks">Review open tasks <span class="button-arrow">→</span></button>`
+          : `<button class="button button-primary" data-action="${hasClient ? 'capture' : 'new-client'}">${hasClient ? 'Capture a request' : 'Add your first client'} <span class="button-arrow">→</span></button>`}
+      </div>
+      <div class="dashboard-flow" aria-label="How the workflow works">
+        <div class="flow-step ${currentStep === 0 ? 'is-current' : hasClient ? 'is-complete' : ''}">
+          <span class="flow-number">01</span>
+          <span><b>${hasClient ? 'Choose a client' : 'Add a client'}</b><small>Keep each workspace separate</small></span>
+        </div>
+        <div class="flow-step ${currentStep === 1 ? 'is-current' : openTasks.length ? 'is-complete' : ''}">
+          <span class="flow-number">02</span>
+          <span><b>Capture a request</b><small>Record what they need</small></span>
+        </div>
+        <div class="flow-step ${currentStep === 2 ? 'is-current' : ''}">
+          <span class="flow-number">03</span>
+          <span><b>Review the next step</b><small>Confirm before it is added</small></span>
+        </div>
+      </div>
+    </section>
+    ${openTasks.length
+      ? `<section class="dashboard-next"><div class="dashboard-section-heading"><h2>Next steps</h2><button class="button-text" data-view="tasks">View all tasks</button></div>${openTasks.slice(0, 3).map(taskRow).join('')}</section>`
+      : ''}
+  `;
 }
-
 const renderWorkspaceBeforeFeedback = renderWorkspace;
 renderWorkspace = function () {
   renderWorkspaceBeforeFeedback();
@@ -217,4 +220,10 @@ document.addEventListener('click', event => {
   showModal(taskForm());
   const priority = document.querySelector('#taskPriority');
   if (priority) priority.value = 'Normal';
+}, true);
+
+document.addEventListener('click', event => {
+  const action = event.target.closest('.onboard [data-action]')?.dataset.action;
+  if (!['start', 'explore', 'client-next', 'email-next', 'skip-email', 'back', 'enter-workspace'].includes(action)) return;
+  requestAnimationFrame(() => window.scrollTo(0, 0));
 }, true);
